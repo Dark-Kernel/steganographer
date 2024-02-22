@@ -31,3 +31,18 @@ def em_audio(audio_file, string_msg, output_file, arged=True):
       waveaudio.close()
       print ("Done...")
 
+def ex_msg(audio_file, output_file, arged=False):
+    if not arged:
+      help()
+    else:
+        print ("Please wait...")
+        waveaudio = wave.open(audio_file, mode='rb')
+        frame_bytes = bytearray(list(waveaudio.readframes(waveaudio.getnframes())))
+        extracted = [frame_bytes[i] & 1 for i in range(len(frame_bytes))]
+        string = "".join(chr(int("".join(map(str,extracted[i:i+8])),2)) for i in range(0,len(extracted),8))
+        msg = string.split("###")[0]
+        with open(f"outdir/{output_file}", "w") as fd:
+              fd.write(msg)
+        print("Your Secret Message is: \033[1;91m"+msg+"\033[0m")
+        waveaudio.close()
+

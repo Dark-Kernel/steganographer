@@ -1,5 +1,4 @@
 import os
-import argparse
 import io
 import sys
 import zlib
@@ -8,19 +7,35 @@ import logging
 import argparse
 import time
 
+from src.modules import audio
+from src.modules.help import banner
+
 def main():
     
-    os.system('cls' if os.name == 'nt' else 'clear') # Clear the terminal
+    try:
+        os.system('cls' if os.name == 'nt' else 'clear')
+        banner()
+        
+        # Argument parser
+        #parser = argparse.ArgumentParser(description="Steganographer is a steganography tool that does everything what it should.")
+
+        parser = argparse.ArgumentParser()
+        parser.add_argument('-f', help='Select Audio File', dest='audiofile')
+        parser.add_argument('-m', help='Enter your Secret Message', dest='secretmsg')
+        parser.add_argument('-o', help='Your Output file path and name', dest='outputfile')
+        args = parser.parse_args()
+        audio_file = args.audiofile
+        string_msg = args.secretmsg
+        output_file = args.outputfile
+        arged = False
     
-    # Argument parser
-    parser = argparse.ArgumentParser(description="Steganographer is a all in one steganography tool that does what it should.")
-
+        if audio_file and string_msg and output_file:
+            arged = True
     
-
-
-    
-
-
+        audio.em_audio(audio_file, string_msg, output_file, arged)
+    except Exception as e:
+        print ("Something went wrong!! try again", e)
+        quit('')
 
 if __name__ == '__main__':
     main()
